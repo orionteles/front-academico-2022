@@ -20,6 +20,7 @@ function App() {
             <Route path="/cursos/create" element={<Cursos />} />
             <Route path="/disciplinas" element={<DisciplinasLista />} />
             <Route path="/disciplinas/create" element={<Disciplinas />} />
+            <Route path="/disciplinas/:id" element={<Disciplinas />} />
           </Routes>
         </Container>
       </BrowserRouter>

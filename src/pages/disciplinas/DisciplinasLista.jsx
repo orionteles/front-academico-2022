@@ -3,6 +3,7 @@ import { Table } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import DisciplinaService from '../../services/academico/DisciplinaService'
 import { FaPlus } from 'react-icons/fa'
+import { BsPencilFill, BsTrash } from 'react-icons/bs'
 
 const DisciplinasLista = () => {
 
@@ -14,7 +15,12 @@ const DisciplinasLista = () => {
 
   }, [])
 
-console.log(disciplinas);
+  function apagar(id) {
+    if(window.confirm('Deseja realmente excluir o registro?')){
+      DisciplinaService.delete(id)
+      setDisciplinas(DisciplinaService.getAll())
+    }
+  }
 
   return (
     <div>
@@ -33,7 +39,10 @@ console.log(disciplinas);
         <tbody>
           {disciplinas.map((item, i) => (
             <tr key={i}>
-              <td>{i}</td>
+              <td>
+                <Link to={'/disciplinas/' + i}><BsPencilFill /></Link>{' '}
+                <BsTrash onClick={() => apagar(i)} className='text-danger' />
+              </td>
               <td>{item.nome}</td>
               <td>{item.curso}</td>
             </tr>
