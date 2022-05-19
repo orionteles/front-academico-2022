@@ -1,82 +1,59 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Form, Table } from 'react-bootstrap'
+import { Table } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { FaCheck } from 'react-icons/fa'
-import { BsArrowLeft } from 'react-icons/bs'
-import apiAcademico from '../../services/apiAcademico'
+import CursoService from '../../services/academico/CursoService'
+import { FaPlus } from 'react-icons/fa'
+import { BsPencilFill, BsTrash } from 'react-icons/bs'
 
 const CursosLista = () => {
 
-    const [cursos, setCursos] = useState([])
-    const [items, setItems] = useState([]);
+  const [cursos, setCursos] = useState([])
 
-    useEffect(() => {
+  useEffect(() => {
 
-        apiAcademico.get('/cursos').then(resultado => {
-            setCursos(resultado.data)
-        })
+    setCursos(CursoService.getAll())
 
-        getFeed()
+  }, [])
 
-
-    }, [])
-
-    async function getFeed() {
-        const rssUrl = 'https://g1.globo.com/rss/g1/politica'
-        const res = await fetch(`https://api.allorigins.win/get?url=${rssUrl}`);
-        const { contents } = await res.json();
-
-        const feed = new window.DOMParser().parseFromString(contents, "text/xml");
-        const items = feed.querySelectorAll("item");
-
-        const feedItems = [...items].map((el) => ({
-            link: el.querySelector("link")?.innerHTML,
-            title: el.querySelector("title")?.innerHTML,
-        }));
-        setItems(feedItems);
-        console.log(feedItems)
+  function apagar(id) {
+    if(window.confirm('Deseja realmente excluir o registro?')){
+      CursoService.delete(id)
+      setCursos(CursoService.getAll())
     }
+  }
 
-    
+  return (
+    <div>
+      <h1>Cursos</h1>
 
-    return (
-        <div>
-            <h1>Cursos</h1>
+      <Link className='btn btn-info mb-3' to={'/cursos/create'}><FaPlus /> Novo</Link>
 
-            <Link to={'/cursos/create'}>Novo</Link>
-
-            {items.map(item => (
-                <div>
-                    <p><a target={'_blank'} href={item.link}>{item.title}</a></p>
-                </div>
-            ))}
-
-
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nome</th>
-                        <th>Duração</th>
-                        <th>Modalidade</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {cursos.map(item => (
-                        <tr key={item.id}>
-                            <td>{item.id}</td>
-                            <td>{item.nome}</td>
-                            <td>{item.duracao}</td>
-                            <td>{item.modalidade}</td>
-                        </tr>
-                    ))}
-
-                </tbody>
-            </Table>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>Duração</th>
+          </tr>
+        </thead>
+        <tbody>
+          {cursos.map((item, i) => (
+            <tr key={i}>
+              <td>
+                <Link to={'/cursos/' + i}><BsPencilFill /></Link>{' '}
+                <BsTrash onClick={() => apagar(i)} className='text-danger' />
+              </td>
+              <td>{item.nome}</td>
+              <td>{item.duracao}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
 
 
-        </div>
-    )
+
+    </div>
+  )
 }
 
 export default CursosLista

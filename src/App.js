@@ -4,9 +4,10 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import Cursos from "./pages/cursos/Cursos";
 import CursosLista from "./pages/cursos/CursosLista";
-import CursosForm from "./pages/cursos/CursosForm";
 import Disciplinas from "./pages/disciplinas/Disciplinas";
 import DisciplinasLista from "./pages/disciplinas/DisciplinasLista";
+import DisciplinasListaBackend from "./pages/disciplinas/DisciplinasListaBackend";
+import DisciplinasBackend from "./pages/disciplinas/DisciplinasBackend";
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
             <Route path="/disciplinas" element={<DisciplinasLista />} />
             <Route path="/disciplinas/create" element={<Disciplinas />} />
             <Route path="/disciplinas/:id" element={<Disciplinas />} />
+            <Route path="/disciplinas-backend" element={<DisciplinasListaBackend />} />
+            <Route path="/disciplinas-backend/create" element={<DisciplinasBackend />} />
+            <Route path="/disciplinas-backend/:id" element={<DisciplinasBackend />} />
           </Routes>
         </Container>
       </BrowserRouter>

@@ -1,57 +1,57 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { useForm } from 'react-hook-form';
 import { FaCheck } from 'react-icons/fa'
 import { BsArrowLeft } from 'react-icons/bs'
-import apiAcademico from '../../services/apiAcademico'
+import CursoService from '../../services/academico/CursoService';
+import cursoValidator from '../../validators/cursoValidator';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 const Cursos = () => {
 
-    const [nome, setNome] = useState('')
-    const [duracao, setDuracao] = useState('')
-    const [modalidade, setModalidade] = useState('')
+  const params = useParams()
+  const navigate = useNavigate()
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
-    function handleNome(event){
-        setNome(event.target.value);
+  useEffect(() => {
+    if (params.id) {
+      const curso = CursoService.get(params.id)
+
+      for (let campo in curso) {
+        setValue(campo, curso[campo])
+      }
+    }
+  }, [])
+
+  function salvar(dados) {
+
+    if (params.id) {
+      CursoService.update(params.id, dados)
+    } else {
+      CursoService.create(dados)
     }
 
-    function handleDuracao(event){
-        setDuracao(event.target.value);
-    }
+    navigate('/cursos')
+  }
 
-    function handleModalidade(event){
-        setModalidade(event.target.value);
-    }
+  return (
+    <div>
+      <h1>Curso</h1>
 
-    function salvar(){
-        const dados = {nome, duracao, modalidade}
-
-        console.log(dados)
-    }
-
-    return (
-        <div>
-            <h1>Cursos</h1>
-            <Form>
-                <Form.Group className="mb-3" controlId="nome">
-                    <Form.Label>Nome: </Form.Label>
-                    <Form.Control type="text" onChange={handleNome} />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="duracao">
-                    <Form.Label>Duração: </Form.Label>
-                    <Form.Control type="number" onChange={handleDuracao}   />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="modalidade">
-                    <Form.Label>Modalidade: </Form.Label>
-                    <Form.Control type="text"  onChange={handleModalidade} />
-                </Form.Group>
-                <div className="text-center">
-                    <Button onClick={salvar}><FaCheck /> Salvar</Button>{' '}
-                    <Link to={-1} className='btn btn-danger'><BsArrowLeft />  Voltar</Link>
-                </div>
-            </Form>
+      <Form >
+        <Form.Group className="mb-3" controlId="nome">
+          <Form.Label>Nome: </Form.Label>
+          <Form.Control isInvalid={errors.nome} type="text" {...register("nome", cursoValidator.nome)} />
+          {errors.nome && <span>{errors.nome.message}</span>}
+        </Form.Group>
+        <div className="text-center">
+          <Button onClick={handleSubmit(salvar)} className='btn btn-success'><FaCheck /> Salvar</Button>{' '}
+          <Link className='btn btn-danger' to={-1}><BsArrowLeft /> Voltar</Link>
         </div>
-    )
+      </Form>
+
+    </div>
+  )
 }
 
 export default Cursos

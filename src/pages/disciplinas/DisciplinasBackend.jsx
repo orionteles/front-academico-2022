@@ -3,44 +3,53 @@ import { Button, Form } from 'react-bootstrap'
 import { useForm } from 'react-hook-form';
 import { FaCheck } from 'react-icons/fa'
 import { BsArrowLeft } from 'react-icons/bs'
-import DisciplinaService from '../../services/academico/DisciplinaService';
-import CursoService from '../../services/academico/CursoService';
+import DisciplinaBackendService from '../../services/academico/DisciplinaBackendService';
 import disciplinaValidator from '../../validators/disciplinaValidator';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import CursoBackendService from '../../services/academico/CursoBackendService';
 
-const Disciplinas = () => {
+const DisciplinasBackend = () => {
 
   const params = useParams()
   const navigate = useNavigate()
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
-  const cursos = CursoService.getAll()
-  
-  useEffect(() => {
-    
-    if (params.id) {
-      const disciplina = DisciplinaService.get(params.id)
+  const [cursos, setCursos] = useState([])
 
-      for (let campo in disciplina) {
-        setValue(campo, disciplina[campo])
-      }
+  useEffect(() => {
+
+    CursoBackendService.getAll().then(resultado => {
+      setCursos(resultado.data);
+    })
+
+    if (params.id) {
+      DisciplinaBackendService.get(params.id).then(resultado => {
+        const disciplina = resultado.data
+
+        for (let campo in disciplina) {
+          setValue(campo, disciplina[campo])
+        }
+      })
     }
+
+
+
   }, [])
 
   function salvar(dados) {
-
+console.log(dados);
     if (params.id) {
-      DisciplinaService.update(params.id, dados)
+      DisciplinaBackendService.update(params.id, dados)
     } else {
-      DisciplinaService.create(dados)
+      DisciplinaBackendService.create(dados)
     }
 
-    navigate('/disciplinas')
+    navigate('/disciplinas-backend')
   }
 
   return (
     <div>
-      <h1>Disciplina</h1>
+      <h1>Disciplinas Backend</h1>
 
       <Form >
         <Form.Group className="mb-3" controlId="nome">
@@ -48,16 +57,18 @@ const Disciplinas = () => {
           <Form.Control isInvalid={errors.nome} type="text" {...register("nome", disciplinaValidator.nome)} />
           {errors.nome && <span>{errors.nome.message}</span>}
         </Form.Group>
-        <Form.Group className="mb-3" controlId="curso">
+        <Form.Group className="mb-3" controlId="curso_id">
           <Form.Label>Curso: </Form.Label>
-          <Form.Select {...register("curso", disciplinaValidator.curso)}>
+          <Form.Select {...register("curso_id", disciplinaValidator.curso_id)}>
             <option>Selecione</option>
-            {cursos.map((item, i) => (
-              <option key={i} value={item.nome}>{item.nome}</option>
+            {cursos.map(item => (
+              <option key={item.id} value={item.id}>{item.nome}</option>
             ))}
           </Form.Select>
-          {errors.curso && <span>Campo Obrigatório</span>}
+          {errors.curso_id && <span>Campo Obrigatório</span>}
         </Form.Group>
+
+
         <div className="text-center">
           <Button onClick={handleSubmit(salvar)} className='btn btn-success'><FaCheck /> Salvar</Button>{' '}
           <Link className='btn btn-danger' to={-1}><BsArrowLeft /> Voltar</Link>
@@ -68,4 +79,4 @@ const Disciplinas = () => {
   )
 }
 
-export default Disciplinas
+export default DisciplinasBackend

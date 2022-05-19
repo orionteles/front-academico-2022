@@ -1,4 +1,4 @@
-const disciplinaValidator = {
+const cursoValidator = {
     nome: {
         required: "O campo Nome é Obrigatório",
         minLength: {
@@ -14,9 +14,6 @@ const disciplinaValidator = {
             message: "O valor mínimo é 3"
         },
     },
-    curso_id: {
-        required: true
-    }
 }
 
-export default disciplinaValidator
+export default cursoValidator
