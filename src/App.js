@@ -8,6 +8,8 @@ import Disciplinas from "./pages/disciplinas/Disciplinas";
 import DisciplinasLista from "./pages/disciplinas/DisciplinasLista";
 import DisciplinasListaBackend from "./pages/disciplinas/DisciplinasListaBackend";
 import DisciplinasBackend from "./pages/disciplinas/DisciplinasBackend";
+import Alunos from "./pages/alunos/Alunos";
+import AlunosLista from "./pages/alunos/AlunosLista";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
             <Route path="/" element={<Cursos />} />
             <Route path="/cursos" element={<CursosLista />} />
             <Route path="/cursos/create" element={<Cursos />} />
+            <Route path="/alunos" element={<AlunosLista />} />
+            <Route path="/alunos/create" element={<Alunos />} />
             <Route path="/disciplinas" element={<DisciplinasLista />} />
             <Route path="/disciplinas/create" element={<Disciplinas />} />
             <Route path="/disciplinas/:id" element={<Disciplinas />} />
