@@ -52,7 +52,7 @@ const Alunos = () => {
           <Form.Control isInvalid={errors.nome} type="text" {...register("nome", alunoValidator.nome)} />
           {errors.nome && <span>{errors.nome.message}</span>}
         </Form.Group>
-        
+
         <Form.Group className="mb-3" controlId="cpf">
           <Form.Label>CPF: </Form.Label>
           <Form.Control isInvalid={errors.cpf} type="text"

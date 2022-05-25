@@ -10,6 +10,8 @@ import DisciplinasListaBackend from "./pages/disciplinas/DisciplinasListaBackend
 import DisciplinasBackend from "./pages/disciplinas/DisciplinasBackend";
 import Alunos from "./pages/alunos/Alunos";
 import AlunosLista from "./pages/alunos/AlunosLista";
+import ProfessoresLista from "./pages/professores/ProfessoresLista";
+import Professores from "./pages/professores/Professores";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
             <Route path="/cursos/create" element={<Cursos />} />
             <Route path="/alunos" element={<AlunosLista />} />
             <Route path="/alunos/create" element={<Alunos />} />
+            <Route path="/professores" element={<ProfessoresLista />} />
+            <Route path="/professores/create" element={<Professores />} />
             <Route path="/disciplinas" element={<DisciplinasLista />} />
             <Route path="/disciplinas/create" element={<Disciplinas />} />
             <Route path="/disciplinas/:id" element={<Disciplinas />} />
